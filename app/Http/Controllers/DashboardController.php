@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
@@ -19,7 +20,18 @@ class DashboardController extends Controller
 
         ]);
     }
+    public function myPost(){
+
+        $posts = Post::all();
+        // dump($posts);
+
+        return view('myPost', [
+            'posts' => $posts,
+
+        ]);
+    }
     public function formPost(Request $request){
+        $categories = Categories::all();
         if ($request->id) {
             $post = Post::find($request->id);
         } else {
@@ -27,7 +39,7 @@ class DashboardController extends Controller
         }
 
 
-        return view('addForm',['post' => $post]);
+        return view('addForm',['post' => $post, 'categories' => $categories]);
 
     }
     public function addPost(Request $request){

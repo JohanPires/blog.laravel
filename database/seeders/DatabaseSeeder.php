@@ -21,13 +21,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         //     'password' => 'test',
         // ]);
-        Post::factory()->create([
-            'title' => 'Test Post 3',
-            'content' => 'content-test 3',
-            'description' => 'description-test 3',
-            'picture' => 'picture-test 3',
-            'categories' => 'categories-test 3',
-            'author' => 'author-test 3',
-        ]);
+        Post::factory()->count(10)->create();
+
     }
 }

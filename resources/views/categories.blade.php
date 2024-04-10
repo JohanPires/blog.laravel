@@ -1,21 +1,38 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Catégories') }}
-        </h2>
+        <div class="flex justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Catégories') }}
+            </h2>
+            <a href="categories/form">Ajouter une catégorie</a>
+            {{-- <form action="{{ route() }}" method="post">
+                @csrf
+                @method('POST')
+                <button type="submit">Ajouter une catégorie</button>
+            </form> --}}
+        </div>
+        {{-- <a href="{{ '/categories' }}">Tous</a>
+        <div class="categories flex justify-center gap-2">
+            @foreach ($categories as $categorie)
+                <a href="{{ '/categories?categories=' . $categorie->title }}">{{ $categorie->title }}</a>
+            @endforeach
+        </div> --}}
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @for ($i = 0; $i < 5; $i++)
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">
-                        {{-- {{ __("You're logged in!") }} --}}
-                        <x-post />
-                        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> --}}
-                    </div>
+            @foreach ($categories as $categorie)
+                <div class="post bg-white rounded-md p-6 mt-6 shadow-lg shadow-black">
+                    <h3>{{ $categorie->title }}</h3>
+                    <p>{{ $categorie->description }}</p>
+                    <img src="{{ $categorie->picture }}" alt="">
+                    <form action="{{ route('deleteCategorie', ['id' => $categorie->id]) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button type='submit'>Supprimer</button>
+                    </form>
                 </div>
-            @endfor
+            @endforeach
         </div>
     </div>
 </x-app-layout>

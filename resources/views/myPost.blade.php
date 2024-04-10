@@ -1,4 +1,3 @@
-{{-- {{ dump(Auth::user()->id) }} --}}
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -11,19 +10,19 @@
             @if (count($posts) > 0)
                 <div class="post-container flex flex-col">
                     @foreach ($posts as $post)
-                        <div class="post bg-white rounded-md p-6 mb-6">
-                            <h2>{{ $post->title }}</h2>
-                            <p>{{ $post->description }}</p>
-                            <img src="{{ $post->picture }}" alt="">
-                            @if ($post->author === Auth::user()->name)
+                        @if ($post->author === Auth::user()->name)
+                            <div class="post bg-white rounded-md p-6 mb-6">
+                                <h2>{{ $post->title }}</h2>
+                                <p>{{ $post->description }}</p>
+                                <img src="{{ $post->picture }}" alt="">
                                 <form action="{{ route('deletePost', ['id' => $post->id]) }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <button type='submit'>Supprimer</button>
                                 </form>
                                 <a href='{{ route('formPost', ['id' => $post->id]) }}'>Modifier</a>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     @endforeach
                 </div>
             @endif

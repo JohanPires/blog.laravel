@@ -90,31 +90,20 @@
                     <legend class="text-sm font-semibold leading-6 text-gray-900">Catégories</legend>
                     <p class="mt-1 text-sm leading-6 text-gray-600">Choisissez une catégories
                     </p>
-                    <div class="mt-6 space-y-6">
-                        <div class="flex items-center gap-x-3">
-                            <input id="push-everything" name="categories" value='web' type="radio"
-                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                @if ($post) @if ($post->categories === 'web') checked @endif
-                                @endif>
-                            <label for="push-everything"
-                                class="block text-sm font-medium leading-6 text-gray-900">Web</label>
-                        </div>
-                        <div class="flex items-center gap-x-3">
-                            <input id="push-email" name="categories" value='tech' type="radio"
-                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                @if ($post) @if ($post->categories === 'tech') checked @endif
-                                @endif>
-                            <label for="push-email"
-                                class="block text-sm font-medium leading-6 text-gray-900">Tech</label>
-                        </div>
-                        <div class="flex items-center gap-x-3">
-                            <input id="push-nothing" name="categories" value='marketing' type="radio"
-                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                @if ($post) @if ($post->categories === 'marketing') checked @endif
-                                @endif>
-                            <label for="push-nothing"
-                                class="block text-sm font-medium leading-6 text-gray-900">Marketing</label>
-                        </div>
+                    <div class="flex gap-4">
+                        @foreach ($categories as $categorie)
+                            <div class="mt-6 space-y-6">
+                                <div class="flex items-center gap-x-3">
+                                    <input id="push-everything" name="categories" value='{{ $categorie->title }}'
+                                        type="radio"
+                                        class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                        @if ($post) @if ($post->categories === $categorie->title) checked @endif
+                                        @endif>
+                                    <label for="push-everything"
+                                        class="block text-sm font-medium leading-6 text-gray-900">{{ $categorie->title }}</label>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </fieldset>
 
