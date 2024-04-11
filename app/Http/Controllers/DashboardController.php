@@ -22,8 +22,7 @@ class DashboardController extends Controller
     }
     public function myPost(){
 
-        $posts = Post::all();
-        // dump($posts);
+        $posts = Post::where( 'author', Auth::user()->name )->get();
 
         return view('myPost', [
             'posts' => $posts,
@@ -43,10 +42,24 @@ class DashboardController extends Controller
 
     }
     public function addPost(Request $request){
+
+        $request->validate([
+            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Taille maximale de 2 Mo
+        ]);
+
+        $image = $request->file('picture');
+
+        $imageName = time().'.'.$image->getClientOriginalExtension();
+
+        $image->move(public_path('images'), $imageName);
+
+
+        $file =$request->file('picture');
+
         $post = new Post;
         $post->title = $request->title;
         $post->description = $request->description;
-        $post->picture =  $request->picture;
+        $post->picture =  $imageName;
         $post->author = Auth::user()->name;
         $post->categories = $request->categories;
         $post->save();

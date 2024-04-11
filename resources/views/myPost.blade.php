@@ -15,6 +15,7 @@
                                 <h2>{{ $post->title }}</h2>
                                 <p>{{ $post->description }}</p>
                                 <img src="{{ $post->picture }}" alt="">
+
                                 <form action="{{ route('deletePost', ['id' => $post->id]) }}" method="post">
                                     @csrf
                                     @method('DELETE')

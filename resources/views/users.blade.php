@@ -9,15 +9,36 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="post-container flex flex-col">
                 @foreach ($users as $user)
-                    <div class="post bg-white rounded-md p-6 mb-6">
-                        <h3>{{ $user->name }}</h3>
-                        <p>{{ $user->email }}</p>
-                        <p><?php if ($user->role === null): ?>
-                            Client
-                            <?php else: ?>
-                            Admin
-                            <?php endif; ?>
-                        </p>
+                    <div class="post bg-white rounded-md p-6 mb-6 flex gap-4">
+                        <div>
+                            <h3>{{ $user->name }}</h3>
+                            <p>{{ $user->email }}</p>
+                            <p><?php if ($user->role === null): ?>
+                                Client
+                                <?php else: ?>
+                                Admin
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                        <form action="{{ route('changeRole', ['id' => $user->id, 'role' => $user->role]) }}"
+                            method="post" class="flex align-middle">
+                            @csrf
+                            @method('PUT')
+                            <select name="role" type='submit'>
+                                <option @if ($user->role === 'admin') selected @endif value="admin">Admin</option>
+                                <option @if ($user->role === null) selected @endif value="{{ null }}">
+                                    Client</option>
+                            </select>
+                            <button type="submit">Editer</button>
+
+                        </form>
+                        <form action="{{ route('deleteUser', ['id' => $user->id]) }}" class="flex align-middle"
+                            method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Supprimer</button>
+
+                        </form>
                     </div>
                 @endforeach
             </div>

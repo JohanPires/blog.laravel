@@ -20,9 +20,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::table('posts', function (Blueprint $table) {
-           $table->foreignIdFor(Categories::class)->nullable()->constrained()->cascadeOnDelete();
-        });
     }
 
     /**

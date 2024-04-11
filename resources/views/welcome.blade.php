@@ -2,7 +2,7 @@
 <div class="categories flex justify-center gap-2">
     <a href="{{ '/' }}">Tous</a>
     @foreach ($categories as $categorie)
-        <a href="{{ '/?categories=' . $categorie->title }}">{{ $categorie->title }}</a>
+        <a href="{{ '/?categories=' . $categorie->id }}">{{ $categorie->title }}</a>
     @endforeach
 </div>
 {{-- <div class="categories flex justify-center gap-2">

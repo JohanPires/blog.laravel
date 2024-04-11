@@ -10,7 +10,8 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <form @if ($post === null) method='post' @else method='post' @endif
-                        @if ($post === null) action="{{ route('addPost') }}" @else action="{{ route('editPost', ['post' => $post->id]) }}" @endif>
+                        @if ($post === null) action="{{ route('addPost') }}" @else action="{{ route('editPost', ['post' => $post->id]) }}" @endif
+                        enctype="multipart/form-data">
                         @csrf
                         @if ($post === null)
                             @method('POST')
