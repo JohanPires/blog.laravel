@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\Categories;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
     public function categories(Request $request) {
-        $categoriesSelect = Categories::all();
+        $categoriesSelect = Categorie::all();
         $categories = $request->query('categories');
 
         if ($categories !== null) {
@@ -32,7 +32,7 @@ class CategoryController extends Controller
     }
 
     public function deleteCategorie(Request $request) {
-        $categorie = Categories::where('id', $request->id);
+        $categorie = Categorie::where('id', $request->id);
         $categorie->delete();
 
         return redirect()->route('categories')->with('success', 'Post supprimé avec succès !');
@@ -45,7 +45,7 @@ class CategoryController extends Controller
 
 
     public function addCategorie(Request $request) {
-        $categorie = new Categories;
+        $categorie = new Categorie;
         $categorie->title = $request->title;
         $categorie->description = $request->description;
         $categorie->picture =  $request->picture;

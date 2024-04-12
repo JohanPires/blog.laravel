@@ -22,10 +22,10 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @foreach ($categories as $categorie)
-                <div class="post bg-white rounded-md p-6 mt-6 shadow-lg shadow-black">
-                    <h3>{{ $categorie->title }}</h3>
-                    <p>{{ $categorie->description }}</p>
-                    <img src="{{ $categorie->picture }}" alt="">
+                <div class="post bg-white rounded-md p-6 mt-6 flex justify-between">
+                    <h3>Nom de catégorie : {{ $categorie->title }}</h3>
+                    {{-- <p>{{ $categorie->description }}</p> --}}
+                    {{-- <img src="{{ $categorie->picture }}" alt=""> --}}
                     <form action="{{ route('deleteCategorie', ['id' => $categorie->id]) }}" method="post">
                         @csrf
                         @method('DELETE')

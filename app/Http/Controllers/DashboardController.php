@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\Categories;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
@@ -30,7 +30,7 @@ class DashboardController extends Controller
         ]);
     }
     public function formPost(Request $request){
-        $categories = Categories::all();
+        $categories = Categorie::all();
         if ($request->id) {
             $post = Post::find($request->id);
         } else {
@@ -56,6 +56,8 @@ class DashboardController extends Controller
 
         $file =$request->file('picture');
 
+
+
         $post = new Post;
         $post->title = $request->title;
         $post->description = $request->description;
@@ -63,6 +65,10 @@ class DashboardController extends Controller
         $post->author = Auth::user()->name;
         $post->categories = $request->categories;
         $post->save();
+
+        $post->categories()->attach($post->id);
+
+        // $post->categories()->sync([1, 2, 3]);
 
 
         return redirect()->route('dashboard')->with('success', 'Post ajouté avec succès !');
@@ -76,11 +82,24 @@ class DashboardController extends Controller
     }
 
     public function edit(Request $request) {
+        $request->validate([
+            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Taille maximale de 2 Mo
+        ]);
+
+        $image = $request->file('picture');
+
+        $imageName = time().'.'.$image->getClientOriginalExtension();
+
+        $image->move(public_path('images'), $imageName);
+
+
+        $file =$request->file('picture');
+
         $post = Post::find($request->post);
         $post->title = $request->title;
         $post->description = $request->description;
         if ($request->picture !== null) {
-            $post->picture = $request->picture;
+            $post->picture = $imageName;
         }else {
             $post->picture = $post->picture;
         }

@@ -6,11 +6,12 @@ use App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Categories extends Model
+class Categorie extends Model
 {
     use HasFactory;
 
-    public function posts(){
-        return $this->hasMany(Post::class);
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class);
     }
 }

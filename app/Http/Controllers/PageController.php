@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use pagination;
 use App\Models\Post;
 use App\Models\User;
-use App\Models\Categories;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,13 +19,12 @@ class PageController extends Controller
     }
 
     public function legal() {
-        // $users = Auth::user()->name;
-        // dump($users);
         return view('legal');
     }
 
     public function index(Request $request) {
-        $categoriesSelect = Categories::all();
+        $users = Auth::user();
+        $categoriesSelect = Categorie::all();
         $categories = $request->categories;
 
         if ($categories !== null) {
@@ -44,7 +43,9 @@ class PageController extends Controller
 
         return view('welcome',[
             'posts' => $posts,
-            'categories' => $categoriesSelect]);
+            'categories' => $categoriesSelect,
+            'users' => $users
+        ]);
     }
 
 
