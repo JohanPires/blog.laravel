@@ -95,28 +95,31 @@
                         @foreach ($categories as $categorie)
                             <div class="mt-6 space-y-6">
                                 <div class="flex items-center gap-x-3">
-                                    <input id="push-everything" name="categories" value='{{ $categorie->title }}'
-                                        type="radio"
-                                        class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                        @if ($post) @if ($post->categories === $categorie->title) checked @endif
-                                        @endif>
-                                    <label for="push-everything"
-                                        class="block text-sm font-medium leading-6 text-gray-900">{{ $categorie->title }}</label>
-                                </div>
-                            </div>
-                        @endforeach
+                                    <input id="push-everything" name="categories[]" value='{{ $categorie->id }}'
+                                        type="checkbox"
+                                        @if ($postCategories) @foreach ($postCategories as $postCategorie){
+                                            @if ($postCategorie->id === $categorie->id)
+                                            checked @endif
+                                        @endforeach
+                        @endif
+                        } class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                        <label for="push-everything"
+                            class="block text-sm font-medium leading-6 text-gray-900">{{ $categorie->title }}</label>
                     </div>
-                </fieldset>
-
-                <div class="mt-6 flex items-center justify-end gap-x-6">
-                    <a href="{{ route('myPost') }}" class="text-sm font-semibold leading-6 text-gray-900">Cancel</a>
-
-                    <button type="submit"
-                        class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
-                </div>
-                </form>
             </div>
+            @endforeach
         </div>
+        </fieldset>
+
+        <div class="mt-6 flex items-center justify-end gap-x-6">
+            <a href="{{ route('myPost') }}" class="text-sm font-semibold leading-6 text-gray-900">Cancel</a>
+
+            <button type="submit"
+                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+        </div>
+        </form>
+    </div>
+    </div>
     </div>
     </div>
 </x-app-layout>

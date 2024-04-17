@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     public function categories(Request $request) {
+        if (Auth::user()->role === null or Auth::user()->role === '') {
+            return redirect()->route('dashboard');
+        }
         $categoriesSelect = Categorie::all();
         $categories = $request->query('categories');
 
@@ -20,19 +23,19 @@ class CategoryController extends Controller
             $posts = Post::all();
         }
 
-        if (Auth::user()->role === null) {
-            return redirect()->route('dashboard')->with('success', 'Post supprimé avec succès !');
-        }
-
 
         return view('categories', [
             'posts' => $posts,
             'categories' => $categoriesSelect
         ]);
+
+
+
     }
 
     public function deleteCategorie(Request $request) {
-        $categorie = Categorie::where('id', $request->id);
+        $categorie = Categorie::find($request->id);
+        $categorie->posts()->detach();
         $categorie->delete();
 
         return redirect()->route('categories')->with('success', 'Post supprimé avec succès !');
@@ -40,11 +43,19 @@ class CategoryController extends Controller
 
 
     public function formCategories() {
+        if (Auth::user()->role === null or Auth::user()->role === '') {
+            return redirect()->route('dashboard');
+        }
         return view('categoriesForm');
     }
 
 
     public function addCategorie(Request $request) {
+
+        // $request->validate([
+        //     'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        // ]);
+
         $categorie = new Categorie;
         $categorie->title = $request->title;
         $categorie->description = $request->description;

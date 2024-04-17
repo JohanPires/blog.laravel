@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.svg-accueil {
+    height: 40px !important;
+    width: 40px !important;
+}
+
+.categories {
+    position: fixed;
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.header-accueil {
+    background-color: #212121;
+}
+
+.title-accueil {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}

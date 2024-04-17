@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,11 +11,11 @@ class UserController extends Controller
 {
 
     public function usersList(){
+        if (Auth::user()->role === null or Auth::user()->role === '') {
+            return redirect()->route('dashboard');
+        }
         $users = User::all();
 
-        if (Auth::user()->role === null) {
-            return redirect()->route('dashboard')->with('success', 'Post supprimé avec succès !');
-        }
 
 
         return view('users', ['users' => $users]);
@@ -30,8 +31,18 @@ class UserController extends Controller
     }
     public function deleteUser(Request $request){
 
+
         $users = User::find($request->id);
+        $posts = Post::all()->where('author',$request->id);
         $users->delete();
+
+        foreach($posts as $post){
+            $post->categories()->detach();
+            $post->delete();
+
+        }
+        // dd($test);
+        // Post::all()->where('author', $request->id)->categories()->detach();
 
         return redirect()->route('usersList')->with('users', 'Post editer avec succès !');
     }

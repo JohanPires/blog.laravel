@@ -21,8 +21,8 @@ class DashboardController extends Controller
         ]);
     }
     public function myPost(){
-
-        $posts = Post::where( 'author', Auth::user()->name )->get();
+        $posts = Post::where( 'author', Auth::user()->id )->get();
+        // dd($posts);
 
         return view('myPost', [
             'posts' => $posts,
@@ -30,22 +30,31 @@ class DashboardController extends Controller
         ]);
     }
     public function formPost(Request $request){
+
+
         $categories = Categorie::all();
         if ($request->id) {
-            $post = Post::find($request->id);
+            $postCategories = Post::find($request->id)->categories()->get();
+            $posts = Post::where('id',$request->id)->get();
+            $post = $posts[0];
         } else {
             $post = null;
+            $postCategories = null;
         }
 
 
-        return view('addForm',['post' => $post, 'categories' => $categories]);
+        return view('addForm',['post' => $post, 'categories' => $categories, 'postCategories' => $postCategories]);
 
     }
     public function addPost(Request $request){
 
-        $request->validate([
-            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Taille maximale de 2 Mo
-        ]);
+
+        // $request->validate([
+        //     'title' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        //     'picture' => 'required',
+        //     'description' => 'required',
+        //     'author' => 'required',
+        // ]);
 
         $image = $request->file('picture');
 
@@ -62,50 +71,62 @@ class DashboardController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         $post->picture =  $imageName;
-        $post->author = Auth::user()->name;
-        $post->categories = $request->categories;
+        $post->author = Auth::user()->id;
         $post->save();
 
-        $post->categories()->attach($post->id);
+        $allCategories = $request->categories;
+        foreach($allCategories as $categorie ){
 
-        // $post->categories()->sync([1, 2, 3]);
-
+            $post->categories()->attach($categorie);
+        }
 
         return redirect()->route('dashboard')->with('success', 'Post ajouté avec succès !');
     }
 
     public function delete(Request $request) {
         $post = Post::find($request->id);
+        Post::find($request->id)->categories()->detach();
         $post->delete();
+
+
 
         return redirect()->route('dashboard')->with('success', 'Post supprimé avec succès !');
     }
 
     public function edit(Request $request) {
-        $request->validate([
-            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Taille maximale de 2 Mo
-        ]);
-
-        $image = $request->file('picture');
-
-        $imageName = time().'.'.$image->getClientOriginalExtension();
-
-        $image->move(public_path('images'), $imageName);
 
 
-        $file =$request->file('picture');
+        // $request->validate([
+        //     'title' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        //     'picture' => 'required',
+        //     'description' => 'required',
+        //     'author' => 'required',
+        // ]);
+
 
         $post = Post::find($request->post);
         $post->title = $request->title;
         $post->description = $request->description;
         if ($request->picture !== null) {
+            $image = $request->file('picture');
+
+            $imageName = time().'.'.$image->getClientOriginalExtension();
+
+            $image->move(public_path('images'), $imageName);
+
+
+            $file =$request->file('picture');
             $post->picture = $imageName;
         }else {
             $post->picture = $post->picture;
         }
-        $post->author = Auth::user()->name;
-        $post->categories = $request->categories;
+        $post->author = Auth::user()->id;
+        Post::find($request->post)->categories()->sync($request->categories);
         $post->save();
+
+
+
+
 
         return redirect()->route('dashboard')->with('success', 'Post supprimé avec succès !');
     }

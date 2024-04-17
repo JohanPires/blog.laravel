@@ -14,7 +14,6 @@ class Post extends Model
         'title',
         'description',
         'picture',
-        'categories',
         'author',
     ];
     public function categories()

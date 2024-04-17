@@ -11,6 +11,8 @@ use App\Http\Controllers\DashboardController;
 
 
 Route::get('/', [PageController::class, 'index'])->name('index');
+Route::delete('/', [PageController::class, 'deletePostWelcome'])->name('deletePostWelcome');
+Route::get('/post/{id}', [PageController::class, 'showOne'])->name('showOne');
 
 Route::get('/about', [PageController::class, 'about'])->name('about');
 

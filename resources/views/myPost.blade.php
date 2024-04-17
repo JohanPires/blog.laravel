@@ -17,7 +17,8 @@
                                     <p>{{ $post->description }}</p>
                                 </div>
                                 <div class="flex gap-4">
-                                    @if ($post->author === Auth::user()->name)
+                                    {{-- @dd(Auth::user()->id); --}}
+                                    @if ($post->author == Auth::user()->id)
                                         <form action="{{ route('deletePost', ['id' => $post->id]) }}" method="post">
                                             @csrf
                                             @method('DELETE')

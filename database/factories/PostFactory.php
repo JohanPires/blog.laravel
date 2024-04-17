@@ -19,8 +19,8 @@ class PostFactory extends Factory
         return [
             'title' => fake()->word(),
             'description' => fake()->sentence(10),
-            'picture' => '1712821534.png',
-            'categories' => fake()->randomElement(['web', 'tech', 'marketing']),
+            'picture' => '1713273459.jpg',
+            // 'categories' => fake()->randomElement(['web', 'tech', 'marketing']),
             'author' => fake()->word(),
         ];
     }

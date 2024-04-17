@@ -28,17 +28,13 @@ class PageController extends Controller
         $categories = $request->categories;
 
         if ($categories !== null) {
-            $posts = Post::where('categories', $categories)->get();
+            $posts = Post::whereHas('categories', function ($query) use ($categories) {
+                $query->where('categories.id', $categories);
+            })->get();
         } else {
 
             $posts = Post::all();
         }
-        // if ($categories !== null) {
-        //     $posts = Post::with('categories')->get();
-        // } else {
-
-        //     $posts = Post::all();
-        // }
 
 
         return view('welcome',[
@@ -48,8 +44,16 @@ class PageController extends Controller
         ]);
     }
 
+    public function showOne(Request $request){
+        $post = Post::find($request->id);
+        return view('showOne', ['post' => $post]);
+    }
 
+    public function deletePostWelcome(Request $request) {
+        $post = Post::find($request->id);
+        $post->delete();
 
-
+        return redirect()->route('index')->with('success', 'Post supprimé avec succès !');
+    }
 
 }
