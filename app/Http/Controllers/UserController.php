@@ -11,9 +11,7 @@ class UserController extends Controller
 {
 
     public function usersList(){
-        if (Auth::user()->role === null or Auth::user()->role === '') {
-            return redirect()->route('dashboard');
-        }
+
         $users = User::all();
 
 

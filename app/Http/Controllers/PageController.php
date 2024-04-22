@@ -23,30 +23,62 @@ class PageController extends Controller
     }
 
     public function index(Request $request) {
+
         $users = Auth::user();
         $categoriesSelect = Categorie::all();
-        $categories = $request->categories;
+        $allUsers = User::all();
 
-        if ($categories !== null) {
-            $posts = Post::whereHas('categories', function ($query) use ($categories) {
-                $query->where('categories.id', $categories);
-            })->get();
-        } else {
 
-            $posts = Post::all();
-        }
 
 
         return view('welcome',[
+            'categories' => $categoriesSelect,
+            'users' => $users,
+            'allUsers' => $allUsers
+        ]);
+    }
+    public function filter(Request $request) {
+        $users = Auth::user();
+        $categoriesSelect = Categorie::all();
+        $allUsers = User::all();
+        $categories = explode(',', $request->categories);
+        $postsQuery =  Post::query();
+         if ($categories !== null) {
+            if ($categories[0] === 'all' or $categories[0] === ''){
+                $posts = Post::latest()->paginate(8);
+            } else {
+
+                foreach($categories as $categorie){
+
+                    $postsQuery->orWhereHas('categories', function ($query) use ($categorie) {
+                        $query->where('categories.id', $categorie);
+                    });
+                }
+                $posts = $postsQuery->latest()->paginate(8);
+            }
+        } else {
+
+            $posts = Post::latest()->paginate(8);
+        }
+
+
+        return view('allPosts',[
             'posts' => $posts,
             'categories' => $categoriesSelect,
-            'users' => $users
+            'users' => $users,
+            'allUsers' => $allUsers
         ]);
     }
 
+
+
     public function showOne(Request $request){
+
         $post = Post::find($request->id);
-        return view('showOne', ['post' => $post]);
+        $user = User::find($post->author);
+
+        // dd($user);
+        return view('showOne', ['post' => $post, 'user' => $user]);
     }
 
     public function deletePostWelcome(Request $request) {

@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Models\Post;
+use App\Models\Categorie;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
  */
-class PostFactory extends Factory
+class PivotTableFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,10 +19,8 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->word(),
-            'description' => fake()->sentence(10),
-            'picture' => fake()->randomElement(['1713273459.jpg', '1713363791.jpg', '1713363770.jpg']),
-            'author' =>  User::inRandomOrder()->first()->id,
+            'post_id' => Post::factory(),
+            'categorie_id' => Categorie::factory(),
         ];
     }
 }

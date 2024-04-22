@@ -5,38 +5,83 @@
     asperiores
     voluptatem
     temporibus expedita
-    reiciendis nisi dolorem quam corporis quos quia ad! Asperiores repellat voluptatum consequuntur iusto perspiciatis
+    reiciendis nisi dolorem quam corporis quos quia ad! Asperiores repellat voluptatum consequuntur iusto
+    perspiciatis
     explicabo, temporibus maxime, neque dolor corporis omnis aspernatur ipsam minima ullam eos.</p>
 
 <div class="categories flex flex-col justify-center gap-2">
-    <a href="{{ '/' }}">Tous</a>
+    {{-- <a href="{{ '/' }}">Tous</a> --}}
+    @csrf
+    <label for="all">Tous</label>
+    <input type="checkbox" name="categories[]" value="all" id="all" class='checkCategories'>
     @foreach ($categories as $categorie)
-        <a href="{{ '/?categories=' . $categorie->id }}">{{ $categorie->title }}</a>
+        {{-- <a href="{{ '/?categories=' . $categorie->id }}">{{ $categorie->title }}</a> --}}
+        <label for="{{ $categorie->title }}">{{ $categorie->title }}</label>
+        <input type="checkbox" name="categories[]" value="{{ $categorie->id }}" id="{{ $categorie->title }}"
+            class='checkCategories'>
     @endforeach
 </div>
 <div class="post-container flex flex-wrap gap-6 justify-center">
-    @foreach ($posts as $post)
-        <div
-            class="max-w-60 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-full w-full">
 
-            <img class="rounded-t-lg w-full" src="{{ asset('images/' . $post->picture) }}" alt="" />
 
-            <div class="p-5">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    {{ $post->title }}</h5>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ $post->description }}</p>
-                <a href="{{ route('showOne', ['id' => $post->id]) }}"
-                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    Read more
-                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 14 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 5h12m0 0L9 1m4 4L9 9" />
-                    </svg>
-                </a>
-            </div>
-        </div>
-    @endforeach
 </div>
+
+
+
+<script>
+    const postContainer = document.querySelector('.post-container');
+    const checkboxes = document.querySelectorAll('input[type=checkbox]');
+    const labels = document.querySelectorAll('labels');
+
+    const loadPosts = (url) => {
+        fetch(url)
+            .then(response => response.text())
+            .then(data => postContainer.innerHTML = data)
+            .catch(error => console.error('Erreur lors du chargement des posts:', error));
+    };
+
+    loadPosts('http://localhost:8000/filter');
+
+    checkboxes.forEach(check => {
+        check.addEventListener('change', () => {
+            if (check.checked) {
+                const selectedCategories = Array.from(document.querySelectorAll(
+                        'input[type=checkbox]:checked'))
+                    .map(checkbox => checkbox.value)
+                    .join(',');
+
+                const url = 'http://localhost:8000/filter?categories=' + selectedCategories;
+                loadPosts(url);
+                const label = document.querySelector('label[for="' + check.id + '"]');
+                if (label) {
+                    label.style.color = 'black';
+                }
+            } else {
+                const selectedCategories = Array.from(document.querySelectorAll(
+                        'input[type=checkbox]:checked'))
+                    .map(checkbox => checkbox.value)
+                    .join(',');
+
+                console.log(selectedCategories);
+
+                const url = 'http://localhost:8000/filter?categories=' + selectedCategories;
+                loadPosts(url);
+                const label = document.querySelector('label[for="' + check.id + '"]');
+                if (label) {
+                    label.style.color = '#7C7D7D';
+                }
+            }
+        });
+    });
+
+    postContainer.addEventListener('click', event => {
+        if (event.target.tagName === 'A') {
+            event.preventDefault();
+            const url = event.target.href;
+            console.log(url);
+            loadPosts(url);
+        }
+    });
+</script>
 
 <x-footer />

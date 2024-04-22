@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     public function categories(Request $request) {
-        if (Auth::user()->role === null or Auth::user()->role === '') {
-            return redirect()->route('dashboard');
-        }
+
         $categoriesSelect = Categorie::all();
         $categories = $request->query('categories');
 
@@ -43,18 +41,18 @@ class CategoryController extends Controller
 
 
     public function formCategories() {
-        if (Auth::user()->role === null or Auth::user()->role === '') {
-            return redirect()->route('dashboard');
-        }
+
         return view('categoriesForm');
     }
 
 
     public function addCategorie(Request $request) {
 
-        // $request->validate([
-        //     'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        // ]);
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            // 'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
         $categorie = new Categorie;
         $categorie->title = $request->title;

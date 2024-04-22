@@ -49,21 +49,21 @@ class DashboardController extends Controller
     public function addPost(Request $request){
 
 
-        // $request->validate([
-        //     'title' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        //     'picture' => 'required',
-        //     'description' => 'required',
-        //     'author' => 'required',
-        // ]);
+        $request->validate([
+            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'title' => 'required',
+            'description' => 'required',
+        ]);
 
         $image = $request->file('picture');
+
+        // dd($image);
 
         $imageName = time().'.'.$image->getClientOriginalExtension();
 
         $image->move(public_path('images'), $imageName);
 
-
-        $file =$request->file('picture');
+        // $file =$request->file('picture');
 
 
 
@@ -74,10 +74,12 @@ class DashboardController extends Controller
         $post->author = Auth::user()->id;
         $post->save();
 
-        $allCategories = $request->categories;
-        foreach($allCategories as $categorie ){
+        if ($request->categories) {
+            $allCategories = $request->categories;
+            foreach($allCategories as $categorie ){
 
-            $post->categories()->attach($categorie);
+                $post->categories()->attach($categorie);
+            }
         }
 
         return redirect()->route('dashboard')->with('success', 'Post ajouté avec succès !');
@@ -88,7 +90,7 @@ class DashboardController extends Controller
         Post::find($request->id)->categories()->detach();
         $post->delete();
 
-
+        $image_path = app_path("images/news/{$news->photo}");
 
         return redirect()->route('dashboard')->with('success', 'Post supprimé avec succès !');
     }
@@ -115,7 +117,6 @@ class DashboardController extends Controller
             $image->move(public_path('images'), $imageName);
 
 
-            $file =$request->file('picture');
             $post->picture = $imageName;
         }else {
             $post->picture = $post->picture;

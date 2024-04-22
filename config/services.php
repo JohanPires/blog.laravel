@@ -12,7 +12,10 @@ return [
     | location for this type of information, allowing packages to have
     | a conventional file to locate the various service credentials.
     |
-    */
+    */  'recaptcha_v3' => [
+        'siteKey' => env('RECAPTCHA_V3_SITE_KEY'),
+        'secretKey' => env('RECAPTCHA_V3_SECRET_KEY'),
+    ],
 
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
