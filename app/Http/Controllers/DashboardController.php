@@ -57,13 +57,11 @@ class DashboardController extends Controller
 
         $image = $request->file('picture');
 
-        // dd($image);
 
         $imageName = time().'.'.$image->getClientOriginalExtension();
 
         $image->move(public_path('images'), $imageName);
 
-        // $file =$request->file('picture');
 
 
 
@@ -89,8 +87,8 @@ class DashboardController extends Controller
         $post = Post::find($request->id);
         Post::find($request->id)->categories()->detach();
         $post->delete();
-
-        $image_path = app_path("images/news/{$news->photo}");
+        $image_path = public_path("images/{$post->picture}");
+        unlink($image_path);
 
         return redirect()->route('dashboard')->with('success', 'Post supprimé avec succès !');
     }

@@ -27,3 +27,9 @@
 .checkCategories {
     display: none;
 }
+
+.container-about {
+    position: relative;
+    height: 100vh;
+    /* overflow: hidden; */
+}

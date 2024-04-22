@@ -29,9 +29,6 @@ class DatabaseSeeder extends Seeder
             'role' => null,
         ]);
 
-        // Post::factory()->count(10)->create();
-        // Categorie::factory()->count(5)->create();
-
         $categories = Categorie::factory(10)->create();
 
         Post::factory(100)->create()->each(function ($post) use ($categories) {
@@ -42,13 +39,4 @@ class DatabaseSeeder extends Seeder
     }
 }
 
-$categories = Categorie::factory(10)->create();
 
-Post::factory(100)->create()->each(function ($post) use ($categories) {
-    $post->categories()->attach($categories);
-});
-
-
-Post::factory(100)->create()->each(function ($post) {
-    $post->categories()->attach(Categorie::factory()->create());
-});

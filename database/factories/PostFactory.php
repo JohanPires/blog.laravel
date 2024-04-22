@@ -20,7 +20,7 @@ class PostFactory extends Factory
         return [
             'title' => fake()->word(),
             'description' => fake()->sentence(10),
-            'picture' => fake()->randomElement(['1713273459.jpg', '1713363791.jpg', '1713363770.jpg']),
+            'picture' => fake()->randomElement(['1713771160.jpg', '1713771188.jpg', '1713771208.jpg']),
             'author' =>  User::inRandomOrder()->first()->id,
         ];
     }

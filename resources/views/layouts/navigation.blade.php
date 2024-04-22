@@ -104,6 +104,15 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('myPost')" :active="request()->routeIs('myPost')">
+                {{ __('Mes Postes') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('categories')" :active="request()->routeIs('categories')">
+                {{ __('Catégorie') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('usersList')" :active="request()->routeIs('usersList')">
+                {{ __('Utilisateurs') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
